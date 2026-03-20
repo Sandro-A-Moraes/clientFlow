@@ -9,7 +9,7 @@ export class AuthController {
     this.authService = authService;
   }
 
-  public async register(req: Request, res: Response) {
+  public register = async (req: Request, res: Response) => {
     try {
       const user = await this.authService.register(req.body);
       res.status(201).json({ user, success: true });
@@ -20,9 +20,9 @@ export class AuthController {
         res.status(400).json({ message: "Erro desconhecido" });
       }
     }
-  }
+  };
 
-  public async login(req: Request, res: Response) {
+  public login = async (req: Request, res: Response) => {
     try {
       const result = await this.authService.login(req.body);
       res.status(200).json({ ...result, success: true });
@@ -33,10 +33,14 @@ export class AuthController {
         res.status(400).json({ message: "Erro desconhecido" });
       }
     }
-  }
+  };
 
-  public async me(req: AuthenticatedRequest, res: Response) {
-    const userId = req.userId as string;
+  public me = async (req: AuthenticatedRequest, res: Response) => {
+    if (!req.userId) {
+      res.status(401).json({ message: "Usuário não autenticado" });
+      return;
+    }
+    const userId = req.userId;
 
     try {
       const result = await this.authService.me(userId);
@@ -48,5 +52,5 @@ export class AuthController {
         res.status(400).json({ message: "Erro desconhecido" });
       }
     }
-  }
+  };
 }
