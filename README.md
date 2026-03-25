@@ -1,27 +1,33 @@
 # ClientFlow Backend
 
-API backend do projeto ClientFlow, construída com Node.js, TypeScript, Express e Prisma.
+API backend do projeto ClientFlow, construída com Node.js, TypeScript, Express, Prisma e PostgreSQL.
 
-Backend API for the ClientFlow project, built with Node.js, TypeScript, Express, and Prisma.
+Backend API for the ClientFlow project, built with Node.js, TypeScript, Express, Prisma, and PostgreSQL.
 
 ## PT-BR
 
 ### Visão geral
 
-Este backend está em desenvolvimento e atualmente possui:
+O backend já possui autenticação JWT e gerenciamento básico de clientes.
 
-- Estrutura base de API com Express
-- Conexão com PostgreSQL via Prisma
-- Modelos iniciais: `User` e `Client`
-- Endpoint de saúde da aplicação
+Funcionalidades atuais:
 
-### Tecnologias
+- Cadastro e login de usuário
+- Rota protegida para dados do usuário autenticado
+- Cadastro e listagem de clientes por usuário
+- Busca de cliente por ID
+- Filtro de clientes por nome (`search`)
+- Health check da API
+
+### Stack
 
 - Node.js
 - TypeScript
 - Express
 - Prisma
 - PostgreSQL
+- JWT (`jsonwebtoken`)
+- `bcrypt` para hash de senha
 
 ### Requisitos
 
@@ -30,53 +36,114 @@ Este backend está em desenvolvimento e atualmente possui:
 
 ### Configuração
 
-1. Instale as dependências:
+1. Entre na pasta do backend:
+
+```bash
+cd backend
+```
+
+2. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-2. Crie o arquivo `.env` na raiz da pasta `backend`:
+3. Crie o arquivo `.env` na raiz de `backend`:
 
 ```env
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/clientflow"
+JWT_SECRET="sua-chave-secreta"
 PORT=3000
 ```
 
-3. Aplique as migrations do Prisma:
+4. Aplique as migrations:
 
 ```bash
 npx prisma migrate dev
 ```
 
-4. Inicie o servidor em modo desenvolvimento:
+5. Suba o servidor em desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-### Endpoint disponível
+Servidor padrão: `http://localhost:3000`
 
-- `GET /health` -> retorna status da API
+### Autenticação
 
-Exemplo de resposta:
+As rotas protegidas usam header:
+
+```http
+Authorization: Bearer <token>
+```
+
+### Endpoints
+
+#### Health
+
+- `GET /health`
+
+#### Auth
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me` (protegida)
+
+Exemplo de body para cadastro/login:
 
 ```json
 {
-  "status": "ok"
+  "name": "Maria",
+  "email": "maria@email.com",
+  "password": "123456"
 }
 ```
 
-### Estrutura (resumo)
+Resposta de login:
 
-- `src/app.ts`: configuração principal do app
-- `src/infra/http/server.ts`: inicialização do servidor
-- `src/infra/http/routes.ts`: rotas HTTP
-- `prisma/schema.prisma`: modelos e schema do banco
+```json
+{
+  "token": "jwt_token",
+  "user": {
+    "id": "uuid",
+    "name": "Maria",
+    "email": "maria@email.com"
+  },
+  "success": true
+}
+```
+
+#### Clients
+
+- `POST /clients` (protegida)
+- `GET /clients` (protegida)
+- `GET /clients/:id` (protegida)
+- `GET /clients?search=nome` (protegida)
+
+Exemplo de body para criar cliente:
+
+```json
+{
+  "name": "Empresa XPTO",
+  "email": "contato@xpto.com",
+  "phone": "11999999999",
+  "observations": "Cliente preferencial"
+}
+```
 
 ### Scripts
 
-- `npm run dev`: inicia servidor com `tsx watch`
+- `npm run dev`: inicia com `tsx watch`
+- `npm test`: placeholder (ainda não configurado)
+
+### Estrutura resumida
+
+- `src/infra/http/routes.ts`: rotas principais (`/auth`, `/clients`, `/health`)
+- `src/modules/auth`: autenticação, middleware e token JWT
+- `src/modules/clients`: regras e acesso de dados de clientes
+- `src/lib/prisma.ts`: cliente Prisma com adapter PostgreSQL
+- `prisma/schema.prisma`: modelos `User` e `Client`
 
 ---
 
@@ -84,20 +151,26 @@ Exemplo de resposta:
 
 ### Overview
 
-This backend is currently in development and includes:
+The backend now includes JWT authentication and basic client management.
 
-- Base API structure with Express
-- PostgreSQL connection through Prisma
-- Initial models: `User` and `Client`
-- Application health-check endpoint
+Current features:
 
-### Tech stack
+- User registration and login
+- Protected route for authenticated user data
+- Client creation and listing per user
+- Get client by ID
+- Client filtering by name (`search`)
+- API health check
+
+### Stack
 
 - Node.js
 - TypeScript
 - Express
 - Prisma
 - PostgreSQL
+- JWT (`jsonwebtoken`)
+- `bcrypt` for password hashing
 
 ### Requirements
 
@@ -106,50 +179,111 @@ This backend is currently in development and includes:
 
 ### Setup
 
-1. Install dependencies:
+1. Move to the backend folder:
+
+```bash
+cd backend
+```
+
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Create a `.env` file at the `backend` root:
+3. Create the `.env` file at `backend` root:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/clientflow"
+JWT_SECRET="your-secret-key"
 PORT=3000
 ```
 
-3. Apply Prisma migrations:
+4. Run migrations:
 
 ```bash
 npx prisma migrate dev
 ```
 
-4. Start the development server:
+5. Start dev server:
 
 ```bash
 npm run dev
 ```
 
-### Available endpoint
+Default server: `http://localhost:3000`
 
-- `GET /health` -> returns API status
+### Authentication
 
-Example response:
+Protected routes require this header:
+
+```http
+Authorization: Bearer <token>
+```
+
+### Endpoints
+
+#### Health
+
+- `GET /health`
+
+#### Auth
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me` (protected)
+
+Sample register/login payload:
 
 ```json
 {
-  "status": "ok"
+  "name": "Mary",
+  "email": "mary@email.com",
+  "password": "123456"
 }
 ```
 
-### Structure (summary)
+Login response:
 
-- `src/app.ts`: main app configuration
-- `src/infra/http/server.ts`: server bootstrap
-- `src/infra/http/routes.ts`: HTTP routes
-- `prisma/schema.prisma`: database schema and models
+```json
+{
+  "token": "jwt_token",
+  "user": {
+    "id": "uuid",
+    "name": "Mary",
+    "email": "mary@email.com"
+  },
+  "success": true
+}
+```
+
+#### Clients
+
+- `POST /clients` (protected)
+- `GET /clients` (protected)
+- `GET /clients/:id` (protected)
+- `GET /clients?search=name` (protected)
+
+Sample create client payload:
+
+```json
+{
+  "name": "ACME",
+  "email": "contact@acme.com",
+  "phone": "11999999999",
+  "observations": "Priority customer"
+}
+```
 
 ### Scripts
 
 - `npm run dev`: starts server with `tsx watch`
+- `npm test`: placeholder (not configured yet)
+
+### Structure summary
+
+- `src/infra/http/routes.ts`: main routes (`/auth`, `/clients`, `/health`)
+- `src/modules/auth`: authentication, middleware, and JWT token flow
+- `src/modules/clients`: client business rules and data access
+- `src/lib/prisma.ts`: Prisma client with PostgreSQL adapter
+- `prisma/schema.prisma`: `User` and `Client` models
