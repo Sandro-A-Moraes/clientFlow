@@ -35,4 +35,13 @@ export class ClientRepository {
       },
     });
   }
+
+  async findByIdAndUserId(id: string, userId: string) {
+    return prisma.client.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+  }
 }
