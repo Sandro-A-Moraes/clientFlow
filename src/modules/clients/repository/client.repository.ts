@@ -19,10 +19,16 @@ export class ClientRepository {
     });
   }
 
-  async findManyByUserId(userId: string) {
+  async findMany(userId: string, search?: string) {
     return await prisma.client.findMany({
       where: {
         userId,
+        ...(search && {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        }),
       },
       orderBy: {
         createdAt: "desc",
