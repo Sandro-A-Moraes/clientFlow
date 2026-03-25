@@ -36,10 +36,10 @@ export class ClientRepository {
     });
   }
 
-  async findByIdAndUserId(id: string, userId: string) {
+  async findByIdAndUserId(clientId: string, userId: string) {
     return prisma.client.findFirst({
       where: {
-        id,
+        id: clientId,
         userId,
       },
     });
