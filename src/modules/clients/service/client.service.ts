@@ -17,7 +17,12 @@ export class ClientService {
     return this.clientRepository.create(data);
   }
 
-  list(userId: string, search?: string) {
+  async list(userId: string, search?: string) {
     return this.clientRepository.findMany(userId, search);
   }
+
+  async getById(clientId: string, userId: string) {
+    return this.clientRepository.findByIdAndUserId(clientId, userId);
+  }
+
 }
