@@ -69,4 +69,37 @@ export class ClientController {
       }
     }
   };
+
+  public getById = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      const clientId = req.params.id;
+
+      if (typeof clientId !== "string") {
+        res.status(400).json({ message: "Invalid client ID" });
+        return;
+      }
+
+      const client = await this.clientService.getById(clientId, userId);
+
+      if (!client) {
+        res.status(404).json({ message: "Client not found" });
+        return;
+      }
+      res.status(200).json(client);
+    } catch (e) {
+      if (e instanceof Error) {
+        res.status(400).json({ message: e.message });
+      } else {
+        res.status(400).json({ message: "Unknown error" });
+      }
+    }
+  };
+
 }
