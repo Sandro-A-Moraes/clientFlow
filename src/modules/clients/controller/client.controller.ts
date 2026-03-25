@@ -40,21 +40,22 @@ export class ClientController {
   public list = async (req: AuthenticatedRequest, res: Response) => {
     try {
       const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
       const searchParam = req.query.search;
 
       let search: string | undefined;
-
+      
       if(typeof searchParam === "string") {
         search = searchParam;
       } else if (Array.isArray(searchParam) && typeof searchParam[0] === "string") {
         search = searchParam[0];
       } else {
         search = undefined;
-      }
-
-      if (!userId) {
-        res.status(401).json({ message: "Unauthorized" });
-        return;
       }
 
       const clients = await this.clientService.list(userId, search);
