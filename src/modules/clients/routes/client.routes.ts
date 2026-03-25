@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { ClientController } from "../controller/client.controller";
-import { ClientService } from "../service/client.service";
 import { ClientRepository } from "../repository/client.repository";
+import { ClientService } from "../service/client.service";
+import { ClientController } from "../controller/client.controller";
 import { AuthMiddleware } from "../../auth/middleware/auth.middleware";
 
 const clientRepository = new ClientRepository();
