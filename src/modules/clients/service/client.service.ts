@@ -17,7 +17,7 @@ export class ClientService {
     return this.clientRepository.create(data);
   }
 
-  list(userId: string) {
-    return this.clientRepository.findManyByUserId(userId);
+  list(userId: string, search?: string) {
+    return this.clientRepository.findMany(userId, search);
   }
 }
