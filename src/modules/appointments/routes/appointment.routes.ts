@@ -14,7 +14,7 @@ const authMiddleware = new AuthMiddleware();
 
 const appointmentRouter = Router();
 
-appointmentRouter.post("/", authMiddleware.authenticate, (req, res) => appointmentController.create(req, res));
-appointmentRouter.get("/:clientId", authMiddleware.authenticate, (req, res) => appointmentController.listByClientId(req, res));
+appointmentRouter.post("/", authMiddleware.authenticate, appointmentController.create);
+appointmentRouter.get("/:clientId", authMiddleware.authenticate, appointmentController.listByClientId);
 
 export { appointmentRouter };
