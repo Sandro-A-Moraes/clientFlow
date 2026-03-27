@@ -27,7 +27,10 @@ export class AppointmentController {
             });
             return res.status(201).json(appointment);
         } catch (error) {
-            return res.status(400).json({ message: "Error creating appointment", error });
+            if (error instanceof Error) {
+              return res.status(400).json({ message: error.message });
+            }
+            return res.status(400).json({ message: "Unknown error" });
         }
     }
 
@@ -48,7 +51,10 @@ export class AppointmentController {
             const appointments = await this.appointmentService.listByClientId(clientId);
             return res.status(200).json(appointments);
         } catch (error) {
-            return res.status(400).json({ message: "Error fetching appointments", error });
+            if (error instanceof Error) {
+                return res.status(400).json({ message: error.message });
+            }
+            return res.status(400).json({ message: "Unknown error" });
         }
     }
 
