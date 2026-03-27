@@ -21,4 +21,15 @@ export class AppointmentRepository {
       },
     });
   }
+
+  async findManyByClientId(clientId: string) {
+    return prisma.appointment.findMany({
+      where: {
+        clientId,
+      },
+      orderBy: {
+        scheduledAt: "desc",
+      },
+    });
+  }
 }
