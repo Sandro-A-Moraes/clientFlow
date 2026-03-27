@@ -36,7 +36,7 @@ export class AppointmentController {
   };
 
   public listByClientId = async (req: AuthenticatedRequest, res: Response) => {
-    const clientIdParam  = req.query.clientId;
+    const clientIdParam = req.query.clientId;
 
     let clientId: string;
 
@@ -51,7 +51,6 @@ export class AppointmentController {
       return res.status(400).json({ message: "Invalid clientId parameter" });
     }
 
-
     const userId = req.userId;
 
     if (!userId) {
@@ -59,8 +58,10 @@ export class AppointmentController {
     }
 
     try {
-      const appointments =
-        await this.appointmentService.listByClientId(clientId, userId);
+      const appointments = await this.appointmentService.listByClientId(
+        clientId,
+        userId,
+      );
       return res.status(200).json(appointments);
     } catch (error) {
       if (error instanceof Error) {
