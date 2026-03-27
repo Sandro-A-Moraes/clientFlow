@@ -9,7 +9,7 @@ export class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    async create(req: AuthenticatedRequest, res: Response) {
+    public create = async (req: AuthenticatedRequest, res: Response) => {
         const { clientId, description, scheduledAt, status, notes } = req.body;
         const userId = req.userId!;
 
@@ -31,7 +31,7 @@ export class AppointmentController {
         }
     }
 
-    async listByClientId(req: AuthenticatedRequest, res: Response) {
+    public listByClientId = async (req: AuthenticatedRequest, res: Response) => {
         const { clientId } = req.params;
 
         if(typeof clientId !== "string") {
