@@ -6,7 +6,6 @@ export class AppointmentRepository {
     description: string;
     scheduledAt: Date;
     status: string;
-    date: Date;
     notes?: string;
   }) {
     return prisma.appointment.create({
@@ -18,6 +17,8 @@ export class AppointmentRepository {
         scheduledAt: true,
         status: true,
         notes: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
