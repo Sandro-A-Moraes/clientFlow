@@ -11,18 +11,19 @@ export class AppointmentService {
     }
 
     async create(data: {
+        userId: string;
         clientId: string;
         description: string;
         scheduledAt: Date;
         status: string;
         notes?: string;
     }) {
-        const client = await this.clientRepository.findByIdAndUserId(data.clientId, "");
+        const client = await this.clientRepository.findByIdAndUserId(data.clientId, data.userId);
 
         if(!client) {
             throw new Error("Client not found");
         }
-        
+
         return this.appointmentRepository.create(data);
     }
 
