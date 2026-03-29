@@ -18,14 +18,16 @@ export class AppointmentService {
         status: string;
         notes?: string;
     }) {
-        const client = await this.clientRepository.findByIdAndUserId(data.clientId, data.userId);
-
-        if(!client) {
-            throw new Error("Client not found");
-        }
+        
         
         if ( !data.clientId || !data.description || !data.scheduledAt || !data.status) {
             throw new Error("Missing required fields");
+        }
+        
+        const client = await this.clientRepository.findByIdAndUserId(data.clientId, data.userId);
+        
+        if(!client) {
+            throw new Error("Client not found");
         }
 
         return this.appointmentRepository.create({
