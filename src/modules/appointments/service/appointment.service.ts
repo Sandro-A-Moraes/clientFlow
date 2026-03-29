@@ -14,7 +14,7 @@ export class AppointmentService {
         userId: string;
         clientId: string;
         description: string;
-        scheduledAt: Date;
+        scheduledAt: string;
         status: string;
         notes?: string;
     }) {
@@ -24,7 +24,9 @@ export class AppointmentService {
             throw new Error("Missing required fields");
         }
 
-        if (isNaN(data.scheduledAt.getTime())) {
+        const scheduledAtDate = new Date(data.scheduledAt);
+
+        if (isNaN(scheduledAtDate.getTime())) {
             throw new Error("Invalid scheduledAt date");
         }
         
@@ -37,7 +39,7 @@ export class AppointmentService {
         return this.appointmentRepository.create({
             clientId: data.clientId,
             description: data.description,
-            scheduledAt: data.scheduledAt,
+            scheduledAt: scheduledAtDate,
             status: data.status,
             ...(data.notes !== undefined && { notes: data.notes }),
         });
