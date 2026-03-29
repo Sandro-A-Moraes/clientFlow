@@ -23,6 +23,10 @@ export class AppointmentService {
         if ( !data.clientId || !data.description || !data.scheduledAt || !data.status) {
             throw new Error("Missing required fields");
         }
+
+        if (isNaN(data.scheduledAt.getTime())) {
+            throw new Error("Invalid scheduledAt date");
+        }
         
         const client = await this.clientRepository.findByIdAndUserId(data.clientId, data.userId);
         
