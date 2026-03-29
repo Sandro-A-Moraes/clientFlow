@@ -11,6 +11,11 @@ export class AppointmentController {
 
   public create = async (req: AuthenticatedRequest, res: Response) => {
     const { clientId, description, scheduledAt, status, notes } = req.body;
+
+    if(!clientId || !description || !scheduledAt || !status) {
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
     const userId = req.userId;
 
     if (!userId) {
