@@ -22,7 +22,7 @@ export class AppointmentController {
         userId,
         clientId,
         description,
-        scheduledAt: new Date(scheduledAt),
+        scheduledAt,
         status,
         notes,
       });
