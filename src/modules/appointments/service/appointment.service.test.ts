@@ -103,31 +103,7 @@ describe("AppointmentService", () => {
       findByIdAndUserId: vi.fn().mockResolvedValue({ id: "client-1" }),
     };
 
-    const appointmentRepository = {
-      findManyByClientId: vi.fn().mockResolvedValue([
-        {
-          id: "1",
-          description: "Consulta",
-          scheduledAt: new Date("2026-03-30T10:00:00.000Z"),
-          status: "pending",
-        },
-        {
-          id: "2",
-          description: "Retorno",
-          scheduledAt: new Date("2026-03-31T10:00:00.000Z"),
-          status: "confirmed",
-        },
-      ]),
-    };
-
-    const service = new AppointmentService(
-      appointmentRepository as any,
-      clientRepository as any,
-    );
-
-    const result = await service.listByClientId("client-1", "user-1");
-
-    expect(result).toEqual([
+    const appointments = [
       {
         id: "1",
         description: "Consulta",
@@ -140,7 +116,21 @@ describe("AppointmentService", () => {
         scheduledAt: new Date("2026-03-31T10:00:00.000Z"),
         status: "confirmed",
       },
-    ]);
+    ];
+
+
+    const appointmentRepository = {
+      findManyByClientId: vi.fn().mockResolvedValue(appointments),
+    };
+
+    const service = new AppointmentService(
+      appointmentRepository as any,
+      clientRepository as any,
+    );
+
+    const result = await service.listByClientId("client-1", "user-1");
+
+    expect(result).toEqual(appointments);
 
     expect(clientRepository.findByIdAndUserId).toHaveBeenCalledWith(
       "client-1",
