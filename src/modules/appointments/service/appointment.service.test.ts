@@ -73,6 +73,31 @@ describe("AppointmentService", () => {
     expect(appointmentRepository.create).not.toHaveBeenCalled();
   });
 
+  it("should throw error when scheduledAt is invalid", async () => {
+    const clientRepository = { findByIdAndUserId: vi.fn() };
+
+    const appointmentRepository = { create: vi.fn() };
+
+    const service = new AppointmentService(
+      appointmentRepository as any,
+      clientRepository as any,
+    );
+
+    const input = {
+      userId: "user-1",
+      clientId: "client-1",
+      description: "Consulta",
+      scheduledAt: "INVALID DATE",
+      status: "pending",
+    };
+
+    await expect(service.create(input)).rejects.toThrow("Invalid date");
+
+    expect(clientRepository.findByIdAndUserId).not.toHaveBeenCalled();
+
+    expect(appointmentRepository.create).not.toHaveBeenCalled();
+  });
+
   it("should return appointments when client belongs to user", async () => {
     const clientRepository = {
       findByIdAndUserId: vi.fn().mockResolvedValue({ id: "client-1" }),
