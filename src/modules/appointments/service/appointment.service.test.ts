@@ -51,8 +51,8 @@ describe("AppointmentService", () => {
     };
 
     const service = new AppointmentService(
-      clientRepository as any,
       appointmentRepository as any,
+      clientRepository as any,
     );
 
     const input = {
@@ -63,7 +63,7 @@ describe("AppointmentService", () => {
       status: "pending",
     };
 
-    await expect(service.create(input)).rejects.toThrow("Client not found")
+    await expect(service.create(input)).rejects.toThrow("Client not found");
 
     expect(clientRepository.findByIdAndUserId).toHaveBeenCalledWith(
       "client-1",
@@ -71,6 +71,59 @@ describe("AppointmentService", () => {
     );
 
     expect(appointmentRepository.create).not.toHaveBeenCalled();
+  });
 
+  it("should return appointments when client belongs to user", async () => {
+    const clientRepository = {
+      findByIdAndUserId: vi.fn().mockResolvedValue({ id: "client-1" }),
+    };
+
+    const appointmentRepository = {
+      findManyByClientId: vi.fn().mockResolvedValue([
+        {
+          id: "1",
+          description: "Consulta",
+          scheduledAt: new Date("2026-03-30T10:00:00.000Z"),
+          status: "pending",
+        },
+        {
+          id: "2",
+          description: "Retorno",
+          scheduledAt: new Date("2026-03-31T10:00:00.000Z"),
+          status: "confirmed",
+        },
+      ]),
+    };
+
+    const service = new AppointmentService(
+      appointmentRepository as any,
+      clientRepository as any,
+    );
+
+    const result = await service.listByClientId("client-1", "user-1");
+
+    expect(result).toEqual([
+      {
+        id: "1",
+        description: "Consulta",
+        scheduledAt: new Date("2026-03-30T10:00:00.000Z"),
+        status: "pending",
+      },
+      {
+        id: "2",
+        description: "Retorno",
+        scheduledAt: new Date("2026-03-31T10:00:00.000Z"),
+        status: "confirmed",
+      },
+    ]);
+
+    expect(clientRepository.findByIdAndUserId).toHaveBeenCalledWith(
+      "client-1",
+      "user-1",
+    );
+
+    expect(appointmentRepository.findManyByClientId).toHaveBeenCalledWith(
+      "client-1",
+    );
   });
 });
