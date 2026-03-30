@@ -141,4 +141,31 @@ describe("AppointmentService", () => {
       "client-1",
     );
   });
+
+  it("should throw error when listing appointments for client that does not belong to user", async () => {
+    const clientRepository = {
+      findByIdAndUserId: vi.fn().mockResolvedValue(null),
+    }
+
+    const appointmentRepository = {
+      findManyByClientId: vi.fn(),
+    };
+
+    const service = new AppointmentService(
+      appointmentRepository as any,
+      clientRepository as any,
+    );
+
+    await expect(service.listByClientId("client-1", "user-1")).rejects.toThrow(
+      "Client not found",
+    );
+
+    expect(clientRepository.findByIdAndUserId).toHaveBeenCalledWith(
+      "client-1",
+      "user-1",
+    );
+
+    expect(appointmentRepository.findManyByClientId).not.toHaveBeenCalled();
+  
+  });
 });
