@@ -60,9 +60,9 @@ authRoutes.post("/register", authController.register);
  *                     name:
  *                       type: string
  *                       example: John Doe
- *                  success:
- *                    type: boolean
- *                    example: true
+ *                     success:
+ *                       type: boolean
+ *                       example: true
  *       401:
  *         description: Invalid credentials
  *         content:
