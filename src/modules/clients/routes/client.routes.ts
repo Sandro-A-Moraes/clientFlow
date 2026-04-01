@@ -14,15 +14,15 @@ const clientRoutes = Router();
  * @openapi
  * /clients:
  *   post:
- *     description: Creates a client for the authenticated user.
  *     summary: Create a new client
+ *     description: Creates a client for the authenticated user.
  *     tags:
  *       - Clients
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       description: Client data
  *       required: true
+ *       description: Client data
  *       content:
  *         application/json:
  *           schema:
@@ -32,12 +32,13 @@ const clientRoutes = Router();
  *         description: Client created successfully
  *         content:
  *           application/json:
+ *             schema:
  *               $ref: '#/components/schemas/ClientResponse'
- *                   $ref: '#/components/schemas/ClientResponse'
+ *       400:
  *         $ref: '#/components/responses/BadRequest'
- *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
  *         $ref: '#/components/responses/Unauthorized'
- *               $ref: '#/components/schemas/ErrorResponse'
+ */
 
 /**
  * @openapi
@@ -69,7 +70,6 @@ const clientRoutes = Router();
  *         $ref: '#/components/responses/BadRequest'
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
- */
  */
 
 /**
