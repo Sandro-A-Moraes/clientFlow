@@ -12,7 +12,7 @@ export class ClientService {
     name: string;
     email: string;
     phone: string;
-    observations?: string;
+    notes?: string;
   }) {
     return this.clientRepository.create(data);
   }

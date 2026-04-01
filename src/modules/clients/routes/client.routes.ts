@@ -14,12 +14,14 @@ const clientRoutes = Router();
  * @openapi
  * /clients:
  *   post:
+ *     description: Creates a client for the authenticated user.
  *     summary: Create a new client
  *     tags:
  *       - Clients
  *     security:
  *       - bearerAuth: []
  *     requestBody:
+ *       description: Client data
  *       required: true
  *       content:
  *         application/json:
@@ -30,23 +32,76 @@ const clientRoutes = Router();
  *         description: Client created successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 client:
+ *               $ref: '#/components/schemas/ClientResponse'
  *                   $ref: '#/components/schemas/ClientResponse'
+ *         $ref: '#/components/responses/BadRequest'
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/Unauthorized'
+ *               $ref: '#/components/schemas/ErrorResponse'
+
+/**
+ * @openapi
+ * /clients:
+ *   get:
+ *     summary: List clients
+ *     description: Returns all clients for the authenticated user. Supports optional search by name.
+ *     tags:
+ *       - Clients
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Client name filter (contains, case-insensitive)
+ *     responses:
+ *       200:
+ *         description: Clients retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ClientResponse'
  *       400:
- *         description: Bad request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/BadRequest'
  *       401:
- *         description: Unauthorized
+ *         $ref: '#/components/responses/Unauthorized'
+ */
+ */
+
+/**
+ * @openapi
+ * /clients/{id}:
+ *   get:
+ *     summary: Get client by id
+ *     description: Returns a single client by id for the authenticated user.
+ *     tags:
+ *       - Clients
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Client id
+ *     responses:
+ *       200:
+ *         description: Client retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: '#/components/schemas/ClientResponse'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
 
 clientRoutes.post("/", authMiddleware.authenticate, clientController.create);

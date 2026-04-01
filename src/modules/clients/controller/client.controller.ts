@@ -11,7 +11,7 @@ export class ClientController {
 
   public create = async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const { name, email, phone, observations } = req.body;
+      const { name, email, phone, notes } = req.body;
       const userId = req.userId;
 
       if (!userId) {
@@ -24,7 +24,7 @@ export class ClientController {
         name,
         email,
         phone,
-        observations,
+        notes,
       });
 
       res.status(201).json(client);
