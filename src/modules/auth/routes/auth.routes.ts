@@ -10,6 +10,71 @@ const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 const authMiddleware = new AuthMiddleware();
 
+/**
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     description: Creates a new user account
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *              - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 1234567890
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: john.doe@example.com
+    *                     success:
+ *                       type: boolean
+ *                       example: true
+    *       409:
+ *         description: User already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User with this email already exists
+
+ */
+
 authRoutes.post("/register", authController.register);
 
 /**
