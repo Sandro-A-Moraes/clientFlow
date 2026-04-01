@@ -9,6 +9,6 @@ npm-debug.log*
 
 # Runtime data
 pids
-/generated/prisma
+src/generated/prisma
 
 dist/
