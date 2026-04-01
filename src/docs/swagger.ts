@@ -1,6 +1,6 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import swaggerJsdoc, { type Options} from "swagger-jsdoc";
 
-const options = {
+const options: Options = {
   definition: {
     openapi: "3.0.0",
     info: {
