@@ -141,6 +141,40 @@ authRoutes.post("/register", authController.register);
  */
 
 authRoutes.post("/login", authController.login);
+
+/**
+ * @openapi
+ * /auth/me:
+ *   get:
+ *     summary: Get current user
+ *     description: Retrieves the details of the currently authenticated user
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 1234567890
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: john.doe@example.com
+ */
+
+
 authRoutes.get("/me", authMiddleware.authenticate, authController.me);
 
 export { authRoutes };
