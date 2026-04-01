@@ -11,7 +11,22 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customSiteTitle: "ClientFlow API Docs",
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      docExpansion: "none",
+      filter: true,
+      tagsSorter: "alpha",
+      operationsSorter: "alpha",
+    },
+  }),
+);
 app.use(router);
 
 export default app;
