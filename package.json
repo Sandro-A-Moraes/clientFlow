@@ -6,7 +6,9 @@
   "scripts": {
     "test": "vitest",
     "test:watch": "vitest",
-    "dev": "tsx watch src/infra/http/server.ts"
+    "dev": "tsx watch src/infra/http/server.ts",
+    "build": "tsc",
+    "start": "node dist/infra/http/server.js"
   },
   "keywords": [],
   "author": "",
