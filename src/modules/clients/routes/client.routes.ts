@@ -15,7 +15,6 @@ const clientRoutes = Router();
  * /clients:
  *   post:
  *     summary: Create a new client
- *     description: Creates a new client account
  *     tags:
  *       - Clients
  *     security:
@@ -25,25 +24,7 @@ const clientRoutes = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - phone
- *             properties:
- *               name:
- *                 type: string
- *                 example: John Doe
- *               email:
- *                 type: string
- *                 format: email
- *                 example: john.doe@example.com
- *               phone:
- *                 type: string
- *                 example: (123) 456-7890
- *               observations:
- *                 type: string
- *                 example: Client with special requirements
+ *             $ref: '#/components/schemas/ClientInput'
  *     responses:
  *       201:
  *         description: Client created successfully
@@ -53,43 +34,19 @@ const clientRoutes = Router();
  *               type: object
  *               properties:
  *                 client:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       example: 1234567890
- *                     name:
- *                       type: string
- *                       example: John Doe
- *                     email:
- *                       type: string
- *                       example: john.doe@example.com
- *                     phone:
- *                       type: string
- *                       example: (123) 456-7890
- *                     observations:
- *                       type: string
- *                       example: Client with special requirements
+ *                   $ref: '#/components/schemas/ClientResponse'
  *       400:
  *         description: Bad request
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Invalid client data
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Unauthorized
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Unauthorized
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 clientRoutes.post("/", authMiddleware.authenticate, clientController.create);
