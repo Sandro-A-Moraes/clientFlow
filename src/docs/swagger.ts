@@ -14,6 +14,22 @@ const options: Options = {
         description: "Development server",
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [
+          
+        ],
+      },
+    ],
   },
   apis: ["./src/modules/**/*.ts", "./src/infra/**/*.ts"],
 };
