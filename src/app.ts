@@ -1,9 +1,9 @@
-import dotenv from 'dotenv';
-import express from 'express'
-import cors from 'cors';
-import router from './infra/http/routes.js';
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import router from "./infra/http/routes.js";
 import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from "./docs/swagger";
+import { swaggerSpec } from "./docs/swagger.js";
 
 dotenv.config();
 

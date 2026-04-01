@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { TokenPayload } from "../types/tokenPayload";
+import type { TokenPayload } from "../types/tokenPayload.js";
 
 export const verifyToken = (token: string) => {
   try {

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { ClientRepository } from "../repository/client.repository";
-import { ClientService } from "../service/client.service";
-import { ClientController } from "../controller/client.controller";
-import { AuthMiddleware } from "../../auth/middleware/auth.middleware";
+import { ClientRepository } from "../repository/client.repository.js";
+import { ClientService } from "../service/client.service.js";
+import { ClientController } from "../controller/client.controller.js";
+import { AuthMiddleware } from "../../auth/middleware/auth.middleware.js";
 
 const clientRepository = new ClientRepository();
 const clientService = new ClientService(clientRepository);

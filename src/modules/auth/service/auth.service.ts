@@ -1,5 +1,5 @@
-import { generateAccessToken } from "../../../shared/utils/generateToken";
-import { UserRepository } from "../../user/repository/user.repository";
+import { generateAccessToken } from "../../../shared/utils/generateToken.js";
+import { UserRepository } from "../../user/repository/user.repository.js";
 import bcrypt from "bcrypt";
 
 export class AuthService {

@@ -1,4 +1,4 @@
-import { ClientRepository } from "../repository/client.repository";
+import { ClientRepository } from "../repository/client.repository.js";
 
 export class ClientService {
   private clientRepository: ClientRepository;

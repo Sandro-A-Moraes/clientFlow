@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { AppointmentController } from "../controller/appointment.controller";
-import { AppointmentService } from "../service/appointment.service";
-import { AppointmentRepository } from "../repository/appointment.repository";
-import { AuthMiddleware } from "../../auth/middleware/auth.middleware";
-import { ClientRepository } from "../../clients/repository/client.repository";
+import { AppointmentController } from "../controller/appointment.controller.js";
+import { AppointmentService } from "../service/appointment.service.js";
+import { AppointmentRepository } from "../repository/appointment.repository.js";
+import { AuthMiddleware } from "../../auth/middleware/auth.middleware.js";
+import { ClientRepository } from "../../clients/repository/client.repository.js";
 
 const appointmentRepository = new AppointmentRepository();
 const clientRepository = new ClientRepository();

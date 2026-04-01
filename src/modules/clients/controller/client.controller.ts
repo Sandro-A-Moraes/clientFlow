@@ -1,6 +1,6 @@
-import { ClientService } from "../service/client.service";
+import { ClientService } from "../service/client.service.js";
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest";
+import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest.js";
 
 export class ClientController {
   private clientService: ClientService;

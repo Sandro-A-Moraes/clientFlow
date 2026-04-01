@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { AuthService } from "../service/auth.service";
-import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest";
+import { AuthService } from "../service/auth.service.js";
+import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest.js";
 
 export class AuthController {
   private authService: AuthService;

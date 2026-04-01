@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { AppointmentService } from "./appointment.service";
+import { AppointmentService } from "./appointment.service.js";
 
 describe("AppointmentService", () => {
   it("should create appointment when data is valid", async () => {
@@ -91,7 +91,9 @@ describe("AppointmentService", () => {
       status: "pending",
     };
 
-    await expect(service.create(input)).rejects.toThrow("Invalid scheduledAt date");
+    await expect(service.create(input)).rejects.toThrow(
+      "Invalid scheduledAt date",
+    );
 
     expect(clientRepository.findByIdAndUserId).not.toHaveBeenCalled();
 
@@ -117,7 +119,6 @@ describe("AppointmentService", () => {
         status: "confirmed",
       },
     ];
-
 
     const appointmentRepository = {
       findManyByClientId: vi.fn().mockResolvedValue(appointments),
@@ -145,7 +146,7 @@ describe("AppointmentService", () => {
   it("should throw error when listing appointments for client that does not belong to user", async () => {
     const clientRepository = {
       findByIdAndUserId: vi.fn().mockResolvedValue(null),
-    }
+    };
 
     const appointmentRepository = {
       findManyByClientId: vi.fn(),
@@ -166,6 +167,5 @@ describe("AppointmentService", () => {
     );
 
     expect(appointmentRepository.findManyByClientId).not.toHaveBeenCalled();
-  
   });
 });

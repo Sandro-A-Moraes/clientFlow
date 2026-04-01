@@ -1,6 +1,6 @@
 import type { NextFunction, Response } from "express";
-import { verifyToken } from "../../../shared/utils/verifyToken";
-import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest";
+import { verifyToken } from "../../../shared/utils/verifyToken.js";
+import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest.js";
 
 export class AuthMiddleware {
   public authenticate(

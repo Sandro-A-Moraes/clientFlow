@@ -1,6 +1,6 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest";
-import { AppointmentService } from "../service/appointment.service";
+import type { AuthenticatedRequest } from "../../../shared/types/authenticatedRequest.js";
+import { AppointmentService } from "../service/appointment.service.js";
 
 export class AppointmentController {
   private appointmentService: AppointmentService;

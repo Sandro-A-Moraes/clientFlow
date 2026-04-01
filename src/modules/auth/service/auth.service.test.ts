@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { AuthService } from "./auth.service";
+import { AuthService } from "./auth.service.js";
 import bcrypt from "bcrypt";
 
 describe("AuthService", () => {
