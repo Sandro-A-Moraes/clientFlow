@@ -99,7 +99,7 @@ const options: Options = {
 
         RegisterInput: {
           type: "object",
-          required: ["name", "email", "password"],
+          required: ["name", "email", "password", "termsAccepted"],
           properties: {
             name: {
               type: "string",
@@ -114,6 +114,11 @@ const options: Options = {
               type: "string",
               format: "password",
               example: "password123",
+            },
+            termsAccepted: {
+              type: "boolean",
+              format: "boolean",
+              example: true,
             },
           },
         },
