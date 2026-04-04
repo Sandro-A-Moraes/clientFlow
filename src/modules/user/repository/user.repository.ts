@@ -17,13 +17,14 @@ export class UserRepository {
     });
   }
 
-  public async create(data: { name: string; email: string; password: string }) {
+  public async create(data: { name: string; email: string; password: string, termsAccepted: boolean }) {
     return await prisma.user.create({
       data,
       select: {
         id: true,
         name: true,
         email: true,
+        termsAccepted: true,
       },
     });
   }
