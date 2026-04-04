@@ -13,6 +13,7 @@ export class AuthService {
     name: string;
     email: string;
     password: string;
+    termsAccepted: boolean;
   }) {
     const existingUser = await this.userRepository.findByEmail(data.email);
 
