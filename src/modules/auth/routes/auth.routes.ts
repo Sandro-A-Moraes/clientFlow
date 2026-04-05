@@ -72,6 +72,10 @@ authRoutes.post("/register", authController.register);
  */
 authRoutes.post("/login", authController.login);
 
+authRoutes.post("/logout", authController.logout);
+
+authRoutes.post("/refresh", authController.refresh);
+
 /**
  * @openapi
  * /auth/me:
