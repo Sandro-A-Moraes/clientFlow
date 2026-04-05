@@ -1,4 +1,4 @@
-import { generateAccessToken } from "../../../shared/utils/generateToken.js";
+import { generateAccessToken, generateRefreshToken } from "../../../shared/utils/generateToken.js";
 import { UserRepository } from "../../user/repository/user.repository.js";
 import bcrypt from "bcrypt";
 
@@ -42,12 +42,21 @@ export class AuthService {
       throw new Error("Invalid credentials");
     }
 
-    const token = generateAccessToken({
+    const accessToken = generateAccessToken({
       userId: user.id,
       email: user.email,
       name: user.name,
     });
-    return { token, user: { id: user.id, name: user.name, email: user.email } };
+
+    const refreshToken = generateRefreshToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+    });
+
+    const tokenHash = await bcrypt.hash(refreshToken, 10);
+
+    return { token: accessToken, refreshToken, user: { id: user.id, name: user.name, email: user.email } };
   }
 
   public async me(userId: string) {
