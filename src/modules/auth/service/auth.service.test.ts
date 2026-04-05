@@ -14,10 +14,16 @@ describe("AuthService", () => {
         termsAccepted: true,
       }),
     };
+    
+    const refreshTokenRepository = {
+      findByTokenHash: vi.fn().mockResolvedValue(null),
+      create: vi.fn(),
+      revokeByTokenHash: vi.fn(),
+    };
 
     vi.spyOn(bcrypt, "hash").mockImplementation(async () => "hashed-password");
 
-    const authService = new AuthService(userRepository);
+    const authService = new AuthService(userRepository, refreshTokenRepository);
 
     const input = {
       name: "John Doe",
@@ -61,9 +67,15 @@ describe("AuthService", () => {
       create: vi.fn(),
     };
 
+    const refreshTokenRepository = {
+      findByTokenHash: vi.fn().mockResolvedValue(null),
+      create: vi.fn(),
+      revokeByTokenHash: vi.fn(),
+    };
+
     vi.spyOn(bcrypt, "compare").mockImplementation(async () => true);
 
-    const authService = new AuthService(userRepository);
+    const authService = new AuthService(userRepository, refreshTokenRepository);
 
     const input = {
       email: "user@example.com",
