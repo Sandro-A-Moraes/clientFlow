@@ -35,6 +35,36 @@ export class AuthController {
     }
   };
 
+  public logout = async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+
+    try {
+      const result = await this.authService.logout(refreshToken);
+      res.status(200).json({ ...result, success: true });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(401).json({ message: error.message });
+      } else {
+        res.status(400).json({ message: "Unknown error" });
+      }
+    }
+  };
+
+  public refresh = async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+
+    try {
+      const result = await this.authService.refresh(refreshToken);
+      res.status(200).json({ ...result, success: true });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(401).json({ message: error.message });
+      } else {
+        res.status(400).json({ message: "Unknown error" });
+      }
+    }
+  };
+
   public me = async (req: AuthenticatedRequest, res: Response) => {
     if (!req.userId) {
       res.status(401).json({ message: "Unauthorized" });
