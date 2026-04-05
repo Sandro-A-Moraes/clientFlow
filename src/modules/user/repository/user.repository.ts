@@ -29,22 +29,4 @@ export class UserRepository {
     });
   }
 
-  public async saveRefreshToken(userId: string, tokenHash: string, expiresAt: Date) {
-    return await prisma.refreshToken.create({
-      data: {
-        userId,
-        tokenHash,
-        expiresAt,
-      },
-    });
-  }
-
-  public async revokeRefreshToken(tokenHash: string) {
-    return await prisma.refreshToken.delete({
-      where: {
-        tokenHash,
-      },
-    });
-  }
-
 }

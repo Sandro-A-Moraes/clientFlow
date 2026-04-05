@@ -56,6 +56,8 @@ export class AuthService {
 
     const tokenHash = await bcrypt.hash(refreshToken, 10);
 
+
+
     return { token: accessToken, refreshToken, user: { id: user.id, name: user.name, email: user.email } };
   }
 
