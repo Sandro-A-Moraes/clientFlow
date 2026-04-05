@@ -76,7 +76,7 @@ export class AuthService {
     });
 
     return {
-      token: accessToken,
+      accessToken,
       refreshToken,
       user: { id: user.id, name: user.name, email: user.email },
     };
