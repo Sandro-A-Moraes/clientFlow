@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import type { RefreshTokenRepository } from "../repository/refreshToken.repository.js";
 import { hashToken } from "../../../shared/utils/hashToken.js";
 
+export const TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
 export class AuthService {
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
@@ -69,7 +71,7 @@ export class AuthService {
     await this.refreshTokenRepository.create({
       userId: user.id,
       tokenHash,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(Date.now() + TOKEN_EXPIRATION_TIME),
     });
 
     return {
@@ -124,7 +126,7 @@ export class AuthService {
     await this.refreshTokenRepository.create({
       userId: user.id,
       tokenHash: newTokenHash,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(Date.now() + TOKEN_EXPIRATION_TIME),
     });
 
     return {
