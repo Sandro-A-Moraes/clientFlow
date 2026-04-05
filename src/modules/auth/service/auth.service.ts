@@ -4,7 +4,6 @@ import {
 } from "../../../shared/utils/generateToken.js";
 import { UserRepository } from "../../user/repository/user.repository.js";
 import bcrypt from "bcrypt";
-import crypto, { hash } from "crypto";
 import type { RefreshTokenRepository } from "../repository/refreshToken.repository.js";
 import { hashToken } from "../../../shared/utils/hashToken.js";
 
@@ -77,6 +76,60 @@ export class AuthService {
       accessToken,
       refreshToken,
       user: { id: user.id, name: user.name, email: user.email },
+    };
+  }
+  
+  public async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new Error("Refresh token is required");
+    }
+
+    const tokenHash = hashToken(refreshToken);
+    const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash);
+
+    if (!storedToken) {
+      throw new Error("Invalid refresh token");
+    }
+
+    if(storedToken.revokedAt) {
+      throw new Error("Refresh token has been revoked");
+    }
+
+    if (storedToken.expiresAt < new Date()) {
+      throw new Error("Refresh token has expired");
+    }
+
+    const user = await this.userRepository.findById(storedToken.userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await this.refreshTokenRepository.revokeByTokenHash(tokenHash);
+
+    const newAccessToken = generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+    });
+
+    const newRefreshToken = generateRefreshToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+    });
+
+    const newTokenHash = hashToken(newRefreshToken);
+
+    await this.refreshTokenRepository.create({
+      userId: user.id,
+      tokenHash: newTokenHash,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken
     };
   }
 
