@@ -3,19 +3,20 @@ import {
   generateRefreshToken,
 } from "../../../shared/utils/generateToken.js";
 import bcrypt from "bcrypt";
-import type { RefreshTokenRepository } from "../repository/refreshToken.repository.js";
 import { hashToken } from "../../../shared/utils/hashToken.js";
 import type { IUserRepository } from "../../user/repository/IUserRepository.js";
+import type { IRefreshTokenRepository } from "../repository/IRefreshTokenRepository.js";
+import { AppError } from "../../../shared/errors/AppError.js";
 
 export const TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 export class AuthService {
   private userRepository: IUserRepository;
-  private refreshTokenRepository: RefreshTokenRepository;
+  private refreshTokenRepository: IRefreshTokenRepository;
 
   constructor(
     userRepository: IUserRepository,
-    refreshTokenRepository: RefreshTokenRepository,
+    refreshTokenRepository: IRefreshTokenRepository,
   ) {
     this.userRepository = userRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -30,7 +31,7 @@ export class AuthService {
     const existingUser = await this.userRepository.findByEmail(data.email);
 
     if (existingUser) {
-      throw new Error("User with this email already exists");
+      throw new AppError("User with this email already exists", 409);
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -45,13 +46,13 @@ export class AuthService {
     const user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new AppError("Invalid credentials", 401);
     }
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("Invalid credentials");
+      throw new AppError("Invalid credentials", 401);
     }
 
     const accessToken = generateAccessToken({
@@ -83,13 +84,13 @@ export class AuthService {
 
   public async logout(refreshToken: string) {
     if (!refreshToken) {
-      throw new Error("Refresh token is required");
+      throw new AppError("Refresh token is required", 400);
     }
     const tokenHash = hashToken(refreshToken);
     const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash);
 
     if (!storedToken || storedToken.expiresAt < new Date() || storedToken.revokedAt) {
-      throw new Error("Invalid or expired refresh token");
+      throw new AppError("Invalid or expired refresh token", 400);
     }
 
     await this.refreshTokenRepository.revokeByTokenHash(tokenHash);
@@ -98,20 +99,20 @@ export class AuthService {
   
   public async refresh(refreshToken: string) {
     if (!refreshToken) {
-      throw new Error("Refresh token is required");
+      throw new AppError("Refresh token is required", 400);
     }
 
     const tokenHash = hashToken(refreshToken);
     const storedToken = await this.refreshTokenRepository.findByTokenHash(tokenHash);
 
     if (!storedToken || storedToken.expiresAt < new Date() || storedToken.revokedAt) {
-      throw new Error("Invalid or expired refresh token");
+      throw new AppError("Invalid or expired refresh token", 400);
     }
 
     const user = await this.userRepository.findById(storedToken.userId);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new AppError("User not found", 404);
     }
 
     await this.refreshTokenRepository.revokeByTokenHash(tokenHash);
@@ -146,7 +147,7 @@ export class AuthService {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new AppError("User not found", 404);
     }
 
     return { user: { id: user.id, name: user.name, email: user.email } };
