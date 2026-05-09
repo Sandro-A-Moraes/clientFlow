@@ -2,19 +2,19 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../../../shared/utils/generateToken.js";
-import { UserRepository } from "../../user/repository/user.repository.js";
 import bcrypt from "bcrypt";
 import type { RefreshTokenRepository } from "../repository/refreshToken.repository.js";
 import { hashToken } from "../../../shared/utils/hashToken.js";
+import type { IUserRepository } from "../../user/repository/IUserRepository.js";
 
 export const TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 export class AuthService {
-  private userRepository: UserRepository;
+  private userRepository: IUserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
 
   constructor(
-    userRepository: UserRepository,
+    userRepository: IUserRepository,
     refreshTokenRepository: RefreshTokenRepository,
   ) {
     this.userRepository = userRepository;
