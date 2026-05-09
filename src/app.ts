@@ -4,6 +4,7 @@ import cors from "cors";
 import router from "./infra/http/routes.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger.js";
+import { errorHandler } from "./infra/http/middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -28,5 +29,7 @@ app.use(
   }),
 );
 app.use(router);
+
+app.use(errorHandler);
 
 export default app;
