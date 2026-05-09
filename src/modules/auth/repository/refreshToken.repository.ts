@@ -1,13 +1,14 @@
 import {prisma} from '../../../lib/prisma.js';
+import type { RefreshToken } from "../types/refreshToken.js";
 
 export class RefreshTokenRepository {
-  public async create(data: { userId: string; tokenHash: string; expiresAt: Date }) {
+  public async create(data: { userId: string; tokenHash: string; expiresAt: Date }): Promise<RefreshToken> {
     return await prisma.refreshToken.create({
       data,
     });
   }
 
-  public async findByTokenHash(tokenHash: string) {
+  public async findByTokenHash(tokenHash: string): Promise<RefreshToken | null> {
     return await prisma.refreshToken.findUnique({
       where: {
         tokenHash,
@@ -15,7 +16,7 @@ export class RefreshTokenRepository {
     });
   }
 
-  public async revokeByTokenHash(tokenHash: string) {
+  public async revokeByTokenHash(tokenHash: string): Promise<RefreshToken> {
     return await prisma.refreshToken.update({
       where: {
         tokenHash,
