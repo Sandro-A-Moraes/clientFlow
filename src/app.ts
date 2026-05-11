@@ -5,6 +5,7 @@ import router from "./infra/http/routes.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger.js";
 import { errorHandler } from "./infra/http/middleware/errorHandler.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -12,10 +13,12 @@ const app = express();
 
 app.use(cors(
   {
-    origin: process.env.CORS_ORIGIN || "*",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     credentials: true,
   }
 ));
+
+app.use(cookieParser());
 app.use(express.json());
 app.use(
   "/docs",
