@@ -25,7 +25,21 @@ export class AuthController {
   public login = async (req: Request, res: Response) => {
     try {
       const result = await this.authService.login(req.body);
-      res.status(200).json({ ...result, success: true });
+
+      res.cookie("accessToken", result.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      });
+      
+      res.cookie("refreshToken", result.refreshToken, { 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
     } catch (error: unknown) {
       if (error instanceof Error) {
         res.status(401).json({ message: error.message });
