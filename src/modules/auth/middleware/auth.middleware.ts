@@ -8,23 +8,24 @@ export class AuthMiddleware {
     res: Response,
     next: NextFunction,
   ) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
-    }
+    const token = req.cookies.accessToken;
 
-    const [schema, token] = authHeader.split(" ");
-    if (schema !== "Bearer" || !token) {
-      return res.status(401).json({ message: "Invalid token format" });
+    if (!token) {
+      return res.status(401).json({
+        message: "No token provided",
+      });
     }
 
     try {
       const decoded = verifyToken(token);
-      req.userId = decoded.userId;
-    } catch (error) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
 
-    next();
+      req.userId = decoded.userId;
+
+      next();
+    } catch (error) {
+      return res.status(401).json({
+        message: "Invalid token",
+      });
+    }
   }
 }
