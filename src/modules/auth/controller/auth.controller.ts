@@ -50,10 +50,14 @@ export class AuthController {
   };
 
   public logout = async (req: Request, res: Response) => {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies.refreshToken;
 
     try {
       const result = await this.authService.logout(refreshToken);
+
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+
       res.status(200).json({success: true });
     } catch (error: unknown) {
       if (error instanceof Error) {
