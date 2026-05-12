@@ -11,6 +11,7 @@ const refreshTokenRepository = new RefreshTokenRepository();
 const authService = new AuthService(userRepository, refreshTokenRepository);
 const authController = new AuthController(authService);
 const authMiddleware = new AuthMiddleware();
+import { authRateLimit } from "../../../infra/http/middleware/security/auth-rate-limit.js";
 
 /**
  * @openapi
@@ -70,7 +71,7 @@ authRoutes.post("/register", authController.register);
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  */
-authRoutes.post("/login", authController.login);
+authRoutes.post("/login", authRateLimit, authController.login);
 
 /**
  * @openapi

@@ -6,10 +6,14 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger.js";
 import { errorHandler } from "./infra/http/middleware/errorHandler.js";
 import cookieParser from "cookie-parser";
+import { globalRateLimit } from "./infra/http/middleware/security/global-rate-limit.js";
 
 dotenv.config();
 
 const app = express();
+
+app.set("trust proxy", 1);
+app.use(globalRateLimit);
 
 app.use(cors(
   {
