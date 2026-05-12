@@ -10,6 +10,8 @@ redisClient.on("error", (err) => {
 
 await redisClient.connect();
 
-await redisClient.ping();
-
 console.log("Connected to Redis successfully");
+
+const pong = await redisClient.ping();
+console.log("Redis ping response:", pong);
+
